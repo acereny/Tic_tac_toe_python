@@ -1,0 +1,65 @@
+def draw_board(board):
+    print("\n")
+    print(f" {board[0]} | {board[1]} | {board[2]} ")
+    print("-----------")
+    print(f" {board[3]} | {board[4]} | {board[5]} ")
+    print("-----------")
+    print(f" {board[6]} | {board[7]} | {board[8]} ")
+    print("\n")
+
+
+def check_winner(board):
+    win_patterns = [
+        (0, 1, 2), (3, 4, 5), (6, 7, 8),  
+        (0, 3, 6), (1, 4, 7), (2, 5, 8),  
+        (0, 4, 8), (2, 4, 6)  
+    ]
+    for p in win_patterns:
+        if board[p[0]] == board[p[1]] == board[p[2]] != " ":
+            return board[p[0]]
+    return None
+
+
+def start_game():
+    board = [" "] * 9
+    current_player = "X"
+    moves_count = 0
+
+    print("--- Welcome to Tic-Tac-Toe ---")
+    print("Instructions: Enter a number 1-9 to place your mark.")
+
+    while True:
+        draw_board(board)
+
+        try:
+            choice = int(input(f"Player {current_player}, enter your move (1-9): ")) - 1
+
+            if choice < 0 or choice > 8:
+                print("Error: Please enter a number between 1 and 9.")
+                continue
+            if board[choice] != " ":
+                print("Error: This spot is already taken! Try again.")
+                continue
+        except ValueError:
+            print("Error: Invalid input. Please enter a valid number.")
+            continue
+
+        board[choice] = current_player
+        moves_count += 1
+
+        winner = check_winner(board)
+        if winner:
+            draw_board(board)
+            print(f"Congratulations! Player {winner} wins! 🏆")
+            break
+
+        if moves_count == 9:
+            draw_board(board)
+            print("It's a tie! No one wins. 🤝")
+            break
+
+        current_player = "O" if current_player == "X" else "X"
+
+
+if __name__ == "__main__":
+    start_game()
